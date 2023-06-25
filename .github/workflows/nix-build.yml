@@ -23,7 +23,7 @@ jobs:
     name: Build Glove80 Firmware
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3.5.3
       - uses: cachix/install-nix-action@v20
         with:
           nix_path: nixpkgs=channel:nixos-22.05
