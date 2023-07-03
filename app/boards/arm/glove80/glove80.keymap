@@ -10,6 +10,7 @@
 #include <dt-bindings/zmk/ext_power.h>
 #include <dt-bindings/zmk/outputs.h>
 #include <dt-bindings/zmk/rgb.h>
+#include <dt-bindings/zmk/mouse.h>
 
 #define HYPER LC(LS(LG(LALT)))
 
@@ -22,6 +23,16 @@
 #define MO_TOG(layer) &mo_tog layer layer   // Macro to apply momentary-layer-on-hold/toggle-layer-on-tap to a specific layer
 #define MEH(key) LS(LC(LA(key)))
 #define HYP(key) LS(LC(LA(LG(key))))
+
+&mmv {
+    acceleration-exponent = <1>;
+    time-to-max-speed-ms = <250>;
+};
+
+&mwh {
+    time-to-max-speed-ms = <250>;
+    acceleration-exponent = <1>;
+};
 
 &mt {
 		tapping-term-ms = <210>;
@@ -195,9 +206,9 @@
         lower_layer {
             bindings = <
             &kp C_BRI_DN      &kp C_BRI_UP        &kp C_PREV      &kp C_NEXT      &kp C_PP                                                                                                           &kp C_MUTE   &kp C_VOL_DN &kp C_VOL_UP  &none           &kp PAUSE_BREAK
-            &trans            &none               &none           &kp KP_MINUS    &kp KP_PLUS     &kp HOME                                                                              &kp LPAR     &kp KP_NUM   &kp KP_EQUAL &kp KP_DIVIDE &kp KP_MULTIPLY &kp PSCRN
-            &trans            &none     &kp KP_MULTIPLY           &kp UP          &kp KP_SLASH    &kp END                                                                               &kp KP_DOT   &kp KP_N7    &kp KP_N8    &kp KP_N9     &kp KP_MINUS    &kp SLCK
-            &trans            &none               &kp LEFT        &kp DOWN        &kp RIGHT       &kp PG_UP                                                                             &kp KP_MINUS &kp KP_N4    &kp KP_N5    &kp KP_N6     &kp KP_PLUS     &none
+            &trans            &mmv MOVE_UP        &none           &kp KP_MINUS    &kp KP_PLUS     &kp HOME                                                                              &kp LPAR     &kp KP_NUM   &kp KP_EQUAL &kp KP_DIVIDE &kp KP_MULTIPLY &kp PSCRN
+            &trans            &mmv MOVE_DOWN      &kp KP_MULTIPLY &kp UP          &kp KP_SLASH    &kp END                                                                               &kp KP_DOT   &mwh SCROLL_UP    &mwh SCROLL_LEFT  &mmv MOVE_UP		&mwh SCROLL_RIGHT    &kp SLCK
+            &trans            &none               &kp LEFT        &kp DOWN        &kp RIGHT       &kp PG_UP                                                                             &kp KP_MINUS &mwh SCROLL_DOWN  &mmv MOVE_LEFT    &mmv MOVE_DOWN  &mmv MOVE_RIGHT     &none
             &trans            &kp K_CMENU         &none           &kp F11         &kp F12         &kp PG_DN       &trans      &trans      &to DEFAULT &trans      &trans      &trans    &kp COMMA    &kp KP_N1    &kp KP_N2    &kp KP_N3     &kp KP_ENTER    &trans
             &trans            &kp CAPS            &kp INS         &kp F11         &kp F12                         &trans      &trans      &trans      &trans      &trans      &trans                 &kp KP_N0    &kp KP_N0    &kp KP_DOT    &kp KP_ENTER    &trans
             >;
