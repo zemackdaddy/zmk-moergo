@@ -74,6 +74,8 @@ CONFIG_ZMK_BACKLIGHT_AUTO_OFF_USB=y
 # space.
 CONFIG_ZMK_HID_CONSUMER_REPORT_USAGES_BASIC=y
 
+CONFIG_ZMK_MOUSE=y
+
 # Turn on debugging to disable optimization. Debug messages can result in larger
 # stacks, so enable stack protection and particularly a larger BLE peripheral stack.
 # CONFIG_DEBUG=y
