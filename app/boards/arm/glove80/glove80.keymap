@@ -12,25 +12,34 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/mouse.h>
 
-#define HYPER LC(LS(LG(LALT)))
+// ==== MOUSE-KEY <section begins> ====
+#define ZMK_MOUSE_DEFAULT_MOVE_VAL 1250
+#define ZMK_MOUSE_DEFAULT_SCRL_VAL 100
+
+#include <dt-bindings/zmk/mouse.h>
 
 &mmv {
-	time-to-max-speed-ms = <400>;             /* <--- How long time until max speed is reached (default: 500) */
+  acceleration-exponent = <1>;      // 1
+  time-to-max-speed-ms = <400>;    // 40
+  delay-ms = <0>;                   // 0
 };
 
-&mt {
+&msc {
+  acceleration-exponent = <1>;      // 0
+  time-to-max-speed-ms = <500>;    // 40
+  delay-ms = <0>;                   // 10
+};
+// ==== MOUSE-KEY <section ends> =====
+
+#define HYPER LC(LS(LG(LALT)))
+
+	&mt {
 		tapping-term-ms = <210>;
 		flavor = "tap-preferred";
 		quick_tap_ms = <200>;
-};
+	};
 
-&lt {
-		quick_tap_ms = <200>;
-};
-
-&mwh {
-  time-to-max-speed-ms = <500>;                 /* <--- How long time until max speed is reached */
-};
+	&lt { quick_tap_ms = <200>; };
 
 / {
 	// layers
@@ -58,35 +67,34 @@
 	#undef MOVE_LEFT_SLOW
 	#undef MOVE_RIGHT
 	#undef MOVE_RIGHT_SLOW
-	#define MOVE_UP MOVE_VERT(-U_MOUSE_MOVE_MAX)
-	#define MOVE_UP_SLOW MOVE_VERT(-U_MOUSE_MOVE_SLOW_MAX)
-	#define MOVE_DOWN MOVE_VERT(U_MOUSE_MOVE_MAX)
-	#define MOVE_DOWN_SLOW MOVE_VERT(U_MOUSE_MOVE_SLOW_MAX)
-	#define MOVE_LEFT MOVE_HOR(-U_MOUSE_MOVE_MAX)
-	#define MOVE_LEFT_SLOW MOVE_HOR(-U_MOUSE_MOVE_SLOW_MAX)
-	#define MOVE_RIGHT MOVE_HOR(U_MOUSE_MOVE_MAX)
-	#define MOVE_RIGHT_SLOW MOVE_HOR(U_MOUSE_MOVE_SLOW_MAX)
+	#define MOVE_UP MOVE_Y(-U_MOUSE_MOVE_MAX)
+	#define MOVE_UP_SLOW MOVE_Y(-U_MOUSE_MOVE_SLOW_MAX)
+	#define MOVE_DOWN MOVE_Y(U_MOUSE_MOVE_MAX)
+	#define MOVE_DOWN_SLOW MOVE_Y(U_MOUSE_MOVE_SLOW_MAX)
+	#define MOVE_LEFT MOVE_X(-U_MOUSE_MOVE_MAX)
+	#define MOVE_LEFT_SLOW MOVE_X(-U_MOUSE_MOVE_SLOW_MAX)
+	#define MOVE_RIGHT MOVE_X(U_MOUSE_MOVE_MAX)
+	#define MOVE_RIGHT_SLOW MOVE_X(U_MOUSE_MOVE_SLOW_MAX)
 
+	#define U_MOUSE_SCRL_MAX 25                    /* <--- New max speed setting (default: 10) */
+	#define U_MOUSE_SCRL_MAX_SLOW 10
 
-	#define U_MOUSE_SCROLL_MAX 25                    /* <--- New max speed setting (default: 10) */
-	#define U_MOUSE_SCROLL_MAX_SLOW 10
-
-	#undef SCROLL_UP
-	#undef SCROLL_UP_SLOW
-	#undef SCROLL_DOWN
-	#undef SCROLL_DOWN_SLOW
-	#undef SCROLL_LEFT
-	#undef SCROLL_LEFT_SLOW
-	#undef SCROLL_RIGHT
-	#undef SCROLL_RIGHT_SLOW
-	#define SCROLL_UP SCROLL_VERT(U_MOUSE_SCROLL_MAX)
-	#define SCROLL_UP_SLOW SCROLL_VERT(U_MOUSE_SCROLL_MAX_SLOW)
-	#define SCROLL_DOWN SCROLL_VERT(-U_MOUSE_SCROLL_MAX)
-	#define SCROLL_DOWN_SLOW SCROLL_VERT(-U_MOUSE_SCROLL_MAX_SLOW)
-	#define SCROLL_LEFT SCROLL_HOR(-U_MOUSE_SCROLL_MAX)
-	#define SCROLL_LEFT_SLOW SCROLL_HOR(-U_MOUSE_SCROLL_MAX_SLOW)
-	#define SCROLL_RIGHT SCROLL_HOR(U_MOUSE_SCROLL_MAX)
-	#define SCROLL_RIGHT_SLOW SCROLL_HOR(U_MOUSE_SCROLL_MAX_SLOW)
+	#undef SCRL_UP
+	#undef SCRL_UP_SLOW
+	#undef SCRL_DOWN
+	#undef SCRL_DOWN_SLOW
+	#undef SCRL_LEFT
+	#undef SCRL_LEFT_SLOW
+	#undef SCRL_RIGHT
+	#undef SCRL_RIGHT_SLOW
+	#define SCRL_UP SCRL_Y(U_MOUSE_SCRL_MAX)
+	#define SCRL_UP_SLOW SCRL_Y(U_MOUSE_SCRL_MAX_SLOW)
+	#define SCRL_DOWN SCRL_Y(-U_MOUSE_SCRL_MAX)
+	#define SCRL_DOWN_SLOW SCRL_Y(-U_MOUSE_SCRL_MAX_SLOW)
+	#define SCRL_LEFT SCRL_X(-U_MOUSE_SCRL_MAX)
+	#define SCRL_LEFT_SLOW SCRL_X(-U_MOUSE_SCRL_MAX_SLOW)
+	#define SCRL_RIGHT SCRL_X(U_MOUSE_SCRL_MAX)
+	#define SCRL_RIGHT_SLOW SCRL_X(U_MOUSE_SCRL_MAX_SLOW)
 
   // TYPING_STREAK_TERM defines how long you need to wait (milliseconds)
   // after typing before you can use home row mods again.  It prevents
@@ -162,8 +170,7 @@
                         71 54   55 72
 };
 
-/ {
-		/*****************************************************************************/
+	/*****************************************************************************/
 
 																		/* Helper Macros */
 
@@ -228,7 +235,7 @@
 				)
 
 		/* Thumb layer tap behavior for Editing, Number, Media and Function layers */
-		THUMB_LAYER_TAP(t_lt, &kp)
+	/{ THUMB_LAYER_TAP(t_lt, &kp) };
 
 		/*****************************************************************************/
 
@@ -247,12 +254,12 @@
 				)
 
 		/* Main Autoshift behavior */
-		AUTOSHIFT(as, &kp, &kp)
+		/ { AUTOSHIFT(as, &kp, &kp) };
 
 		/* Autoshift behavior for one handed Number layer usage */
-		AUTOSHIFT(tog_sl, &tog, &sl)
+		/ {	AUTOSHIFT(tog_sl, &tog, &sl) };
 
-    behaviors {
+ / {   behaviors {
   //
   // Home row mod-tap keys for all except index fingers
   //
@@ -428,12 +435,12 @@
             // | MAGIC | HOME| END | LEFT | RIGHT|      | BSPC  | DEL   | LALT  | | RALT  | RET   | SPACE |      |  UP   | DOWN  |  [   |   ]   | PGDN |
 
             bindings = <
-            &switchapps    &kp F2   &kp F3      &kp F4      &kp F5                                                                                         &kp F6  &kp F7      &kp F8      &kp F9      &kp F10
-            &kp EQUAL      &kp N1   &kp N2      &kp N3      &kp N4      &kp N5                                                                     &kp N6  &kp N7  &kp N8      &kp N9      &kp N0      &kp MINUS
+            &magic MAGIC 0    &kp F2   &kp F3      &kp F4      &kp F5                                                                                         &kp F6  &kp F7      &kp F8      &kp F9      &kp F10
+            &kp GRAVE      &kp N1   &kp N2      &kp N3      &kp N4      &kp N5                                                                     &kp N6  &kp N7  &kp N8      &kp N9      &kp N0      &kp MINUS
             &kp TAB        &kp SQT    &kp COMMA       &homey_left LALT DOT       &kp P       &kp Y                                                                      &kp F   &kp G   &kp C       &kp R       &kp L       &kp FSLH
-            &t_lt MOUSE ESC        &homey_left LALT A   &homey_left LCTRL O     &homey_left LGUI E       &index_left LSHFT U   &kp I             &kp D   &index_right RSHFT H   &homey_right RGUI T   &homey_right RCTRL N  &homey_right RALT S    &kp BSLH
-            &kp GRAVE      &kp SEMI    &kp Q       &kp J       &homey_left LCTRL K       &homey_left LG(SPACE) X   &homey_left LG(LC(FSLH)) TAB     &kp LCTRL   &layer_td  &kp LGUI  &kp RCTRL &kp RSHFT &kp B   &homey_right RCTRL M   &kp W   &kp V     &kp Z    &kp PG_UP
-            &magic MAGIC 0 &kp HOME &kp END     &kp LEFT    &kp RIGHT   &t_lt LOWER BSPC    &mouse_hold MOUSE 0 &kp LALT   &kp RALT  &kp RET   &t_lt NAV SPACE     &kp UP  &kp DOWN    &kp LBKT    &kp RBKT    &kp PG_DN
+            &t_lt MOUSE ESC        &homey_left LALT A   &homey_left LCTRL O     &homey_left LGUI E       &index_left LSHFT U   &kp I             &kp D   &index_right RSHFT H   &homey_right RGUI T   &homey_right RCTRL N  &homey_right RALT S    &kp MINUS
+            &kp PG_UP      &kp SEMI    &kp Q       &kp J       &homey_left LCTRL K       &homey_left LG(SPACE) X   &homey_left LG(LC(FSLH)) TAB     &kp LCTRL   &layer_td  &kp LGUI  &kp RCTRL &kp RSHFT &kp B   &homey_right RCTRL M   &kp W   &kp V     &kp Z    &kp EQUAL
+            &kp PG_DN &kp HOME &kp END     &kp LEFT    &kp RIGHT   &t_lt LOWER BSPC    &mouse_hold MOUSE 0 &kp LALT   &kp RALT  &kp RET   &t_lt NAV SPACE     &kp UP  &kp DOWN    &kp LBKT    &kp RBKT    &kp BSLH
             >;
         };
 
@@ -468,14 +475,14 @@
             &sys_reset        &none               &none           &none           &none           &none           &bt_2     &bt_3     &none            &none     &none     &none       &none      &none      &none      &none      &none      &sys_reset
             &none             &none               &none           &none           &none                           &bt_0     &bt_1     &out OUT_USB     &none     &none     &none                  &none      &none      &none      &none      &to FACTORY_TEST
             >;
-        };
+				};
 
         mouse_layer {
             bindings = <
  &trans  &trans  &trans  &trans  &trans                                                                  &trans  &trans  &trans  &trans  &trans
  &trans  &trans  &trans  &trans  &trans  &trans                                                  &kp LA(LC(LS(P)))  &trans  &trans  &trans  &trans  &trans
- &trans  &trans  &trans  &trans  &trans  &trans                                                  &mwh SCROLL_UP  &mwh SCROLL_LEFT  &mmv MOVE_UP  &mwh SCROLL_RIGHT  &trans  &trans
- &trans  &trans  &trans  &mkp RCLK  &mkp LCLK  &trans                                                  &mwh SCROLL_DOWN  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &trans  &trans
+ &trans  &trans  &trans  &trans  &trans  &trans                                                  &msc SCRL_UP  &msc SCRL_LEFT  &mmv MOVE_UP  &msc SCRL_RIGHT  &trans  &trans
+ &trans  &trans  &trans  &mkp RCLK  &mkp LCLK  &trans                                                  &msc SCRL_DOWN  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &trans  &trans
  &trans  &trans  &trans  &trans  &trans   &trans &trans  &trans  &trans  &trans  &trans  &kp ESC  &trans  &kp LC(LA(LS(M)))  &trans  &trans  &trans  &trans
  &trans  &trans  &trans  &trans  &mo SLOW_MOUSE          &trans   &tog 0  &trans  &trans  &mkp RCLK  &mkp LCLK          &trans  &trans  &trans  &trans  &trans
             >;
@@ -485,8 +492,8 @@
             bindings = <
  &trans  &trans  &trans  &trans  &trans                                                                  &trans  &trans  &trans  &trans  &trans
  &trans  &trans  &trans  &trans  &trans  &trans                                                  &trans  &trans  &trans  &trans  &trans  &trans
- &trans  &trans  &trans  &trans  &trans  &trans                                                  &mwh SCROLL_UP_SLOW  &mwh SCROLL_LEFT_SLOW  &mmv MOVE_UP_SLOW  &mwh SCROLL_RIGHT_SLOW  &trans  &trans
- &trans  &trans  &trans  &trans  &trans  &trans                                                  &mwh SCROLL_DOWN_SLOW  &mmv MOVE_LEFT_SLOW  &mmv MOVE_DOWN_SLOW  &mmv MOVE_RIGHT_SLOW  &trans  &trans
+ &trans  &trans  &trans  &trans  &trans  &trans                                                  &msc SCRL_UP_SLOW  &msc SCRL_LEFT_SLOW  &mmv MOVE_UP_SLOW  &msc SCRL_RIGHT_SLOW  &trans  &trans
+ &trans  &trans  &trans  &trans  &trans  &trans                                                  &msc SCRL_DOWN_SLOW  &mmv MOVE_LEFT_SLOW  &mmv MOVE_DOWN_SLOW  &mmv MOVE_RIGHT_SLOW  &trans  &trans
  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans
  &trans  &trans  &trans  &trans  &trans          &trans  &trans  &trans  &trans  &trans  &trans          &trans  &trans  &trans  &trans  &trans
             >;
